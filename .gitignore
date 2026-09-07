@@ -1,0 +1,36 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+backend/.venv/
+backend/venv/
+.venv/
+venv/
+
+# Node
+node_modules/
+frontend/node_modules/
+
+# Vite
+frontend/dist/
+frontend/.vite/
+
+# Local database
+data/*.db
+*.sqlite
+*.sqlite3
+
+# PCAP uploads / local analysis files
+data/uploads/
+*.pcap
+*.pcapng
+
+# Environment variables
+.env
+.env.*
+!.env.example
