@@ -10,7 +10,8 @@ import {
   PcapValidationResponse,
 } from '../types/analyzer';
 
-const API_BASE = '/api';
+const RAW_API_URL: string = (import.meta.env.VITE_API_URL as string) || '';
+const API_BASE: string = (RAW_API_URL ? RAW_API_URL.replace(/\/+$/, '') : '') + '/api';
 
 export const api = {
   async getHealth(): Promise<HealthResponse> {
