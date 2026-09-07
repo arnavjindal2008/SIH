@@ -19,13 +19,13 @@ COPY backend/requirements.txt /app/backend/requirements.txt
 RUN pip install --no-cache-dir -U pip && \
     pip install --no-cache-dir -r /app/backend/requirements.txt
 
-# Copy backend application source code, dataset samples, and reporting templates
+# Copy backend application source code and dataset samples
 COPY backend /app/backend
 COPY data /app/data
-COPY reports /app/reports
 
 # Ensure persistent directories exist for PCAP ingestion and PDF report generation
 RUN mkdir -p /app/data/uploads /app/data/samples /app/reports/generated
+
 
 # Environment configurations for module resolution and dynamic port binding
 ENV PYTHONPATH=/app \
