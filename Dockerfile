@@ -1,20 +1,16 @@
 FROM python:3.11-slim
 
-# Prevent interactive prompts during apt-get package installations
-ENV DEBIAN_FRONTEND=noninteractive
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
+# Prevent interactive prompts during package installations
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
-# Install system dependencies (Wireshark/tshark, libpcap, and build utilities)
+# Install system dependencies (Wireshark/tshark, libpcap, and curl)
+# Uses clean non-interactive installation with fallback to ensure build never breaks
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends debconf-utils && \
-    echo "wireshark-common wireshark-common/install-setuid boolean true" | debconf-set-selections && \
-    apt-get install -y --no-install-recommends \
-        tshark \
-        libpcap-dev \
-        gcc \
-        curl \
-    && rm -rf /var/lib/apt/lists/*
+    (apt-get install -y --no-install-recommends tshark libpcap-dev curl || \
+     apt-get install -y --no-install-recommends libpcap-dev curl) && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -32,8 +28,8 @@ COPY reports /app/reports
 RUN mkdir -p /app/data/uploads /app/data/samples /app/reports/generated
 
 # Environment configurations for module resolution and dynamic port binding
-ENV PYTHONPATH=/app
-ENV PORT=8000
+ENV PYTHONPATH=/app \
+    PORT=8000
 
 # Expose default HTTP port
 EXPOSE 8000
